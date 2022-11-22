@@ -44,8 +44,8 @@ class Login : Simulation() {
                 .post("/bank/login")
                 .headers(headers_25)
                 //Oppgave 3
-                .formParam("username", "")
-                .formParam("password", "")
+                .formParam("username", "jsmith@demo.io")
+                .formParam("password", "Demo123!")
         )
         .pause(16)
         .exec(

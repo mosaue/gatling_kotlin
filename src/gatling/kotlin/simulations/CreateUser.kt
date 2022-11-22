@@ -92,9 +92,9 @@ class CreateUser : Simulation() {
                     //Oppgave 8
                     NewAccount(
                         accountName = "Savings",
-                        accountTypeCode = "8",
+                        accountTypeCode = "SCK",
                         openingDeposit = BigDecimal.valueOf(100).setScale(0),
-                        ownerTypeCode = "18"
+                        ownerTypeCode = "IND"
                     )
                 )
             }).header("Authorization", "Bearer \${authTokenUser}")

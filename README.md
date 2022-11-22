@@ -1,67 +1,19 @@
 Oppgave  
 ===============================================
-Vi skal nå utføre et lite knep, for å slippe å manuelt kopiere modellen fra Swagger-dokumentasjonen.
+Vi skal nå teste den samme applikasjonen. Men vi skal bruke web-applikasjonen i stedet for APIet.
 
-1. Åpne `build.gradle.kts`
-2. Kopier inn følgende:
-```
-val spec = "http://192.168.1.93:8080/bank/v2/api-docs"
-val generatedSources = "$buildDir/generated/bank"
-
-sourceSets {
-    getByName("main") {
-        java {
-            srcDir("$generatedSources/src/main/kotlin")
-        }
-    }
-}
-
-tasks{
-    openApiGenerate{
-        generatorName.set("kotlin")
-        inputSpec.set(spec)
-        outputDir.set(generatedSources)
-
-        skipValidateSpec.set(true)
-
-        modelPackage.set("com.example.gatling.api")
-        modelPackage.set("com.example.gatling.model")
-
-        systemProperties.set(
-            mapOf(
-                "models" to "", // Only generate models (not the api and supporting files)
-                "modelDocs" to "false"
-            )
-        )
-
-        configOptions.set(
-            mapOf(
-                "dateLibrary" to "java8",
-                "enumPropertyNaming" to "PascalCase",
-                "serializationLibrary" to "jackson"
-            )
-        )
-
-        typeMappings.set(
-            mapOf(
-                "ByteArray" to "kotlin.String",
-                "java.time.OffsetDateTime" to "kotlin.String"
-            )
-        )
-    }
-
-    compileKotlin {
-        dependsOn(openApiGenerate)
-    }
-}
-```
-3. Sett inn riktig baseUrl
-4. Åpne terminal-vinduet i IntelliJ
-5. Skriv inn: `gradlew build` og kjør kommandoen med `Command + Enter`
-6. Se om dere finner noen nyttige klasser under `build/generated/bank`
-7. I `CreateUser`, erstatt `User` og `Account` med passende nye klasser
-8. I scenarioet må vi lage `NewAccount` med parametre. Den gamle `Account` hadde default verdier. Se hvordan disspe parametrene er satt og legg det inn i scenarioet.
-9. Dere kan nå slette hele `models`-folderen
-10. Kjør testen på nytt. Den skal fortsatt fungere
-
-Vi har nå spart oss for mye manuelt arbeid ved å slippe å lage klasser fra Swagger-dokumentasjonen.
+1. På Mac; åpne Systeminnstillinger -> wifi -> detaljer -> Proxy
+2. Sett Tjener til localhost og Port til 8000
+3. Start recorder
+4. Sett inn listening port til 8000
+5. Sett Package til simulations
+6. Sett Class Name til Login
+7. Trykk Start
+8. Gå inn på `http://baseUrl:8080/bank`
+9. Bruk brukernavn/passord: jsmith@demo.io/Demo123!
+10. Gå tilbake til recorderen
+11. Trykk Stop & Save
+12. Avslutt recorderen
+13. Se i simulations-folderen. Vi har en ny Simulation.
+14. Hva tenker dere i gruppen om alle requestene som blir sendt her? Hvis dere skulle ytelsestestet denne applikasjonen,
+ville dere beholdt alle sammen?

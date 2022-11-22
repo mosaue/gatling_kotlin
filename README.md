@@ -16,7 +16,7 @@ Oppgaver:
 3. Print ut ordet: `Hello, my email is: `. Med eposten fra generert bruker, 10 ganger.
    - Tips: 
    ```
-   feeder.next()["user"]
+   feeder.next()["user"]!!
    ```
    - Tips:
    ```

@@ -2,7 +2,7 @@ Oppgaver:
 ===============================================
 
 1. Fyll inn de resterende feltene i dataklassen `User` som ligger under `src/gatling/kotlin/models/Oppgave1.kt`
-   1. Felter som skal være med er finner dere på 
+   1. Felter som skal være med er finner dere på `baseUrl/bank/swagger-ui.html#/`. Se under Models, newUser
 2. Lag en sekvensgenerator som lager nye `Users`. Det skal genereres unike `ssn`, `emailAddress` og `password` for hver `User` som opprettes
    - Tips: 
    ```

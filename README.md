@@ -1,6 +1,13 @@
 Oppgave  
 ===============================================
-1. Nå som vi har ryddet litt opp i testen vår så kan vi i teorien bruke den til å kjøre ytelsestest. 
-MEN, er det noe vi burde endre?
+Lag lastprofiler for 
+- Load Test
+- Volume Test
+- Stress Test
 
-Diskuter litt i gruppen. Når dere er enige, åpne README.md i docs-folderen.
+Vi kjører kun 5 minutter lange tester.
+
+Forventet last i produksjon er:
+- Jevnt sigende, fra 1 til 30 brukere, per minutt, første 3 minutter
+- 40 brukere per minutt det 4. minuttet
+- Jevnt synkende antall brukere fra 40 til 0, per minutt, siste minuttet

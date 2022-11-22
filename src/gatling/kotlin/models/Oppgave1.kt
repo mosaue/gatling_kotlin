@@ -21,7 +21,7 @@ data class User(
 
 fun main() {
     //Oppgave 2
-    val feeder: Map<String, User> = TODO("Fullfør sekvensgeneratoren")
+    val feeder: Iterator<Map<String, User>> = TODO("Fullfør sekvensgeneratoren")
 
     //Oppgave 3
     for (i in 0 until 10) {

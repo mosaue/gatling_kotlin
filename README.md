@@ -1,41 +1,67 @@
-## Scenario
-Etter disse oppgavene er fullført skal vi ha ferdig et scenario som gjør følgende:
-1. Autentiserer seg som admin-bruker
-2. Legger til en ny bruker i banken
-3. Autentiserer seg som denne nye brukeren
-4. Oppretter en konto i banken
+Oppgave  
+===============================================
+Vi skal nå utføre et lite knep, for å slippe å manuelt kopiere modellen fra Swagger-dokumentasjonen.
 
-## Oppgaver, Del 1:
-1. Åpne `CreateUserDel1` og fyll inn `baseUrl`
-2. Legg til navn på scenario
-3. Legg til en http-request, med POST-metode og de standard-headerne (`genericHeader`)
-   1. Request-URL er: `/api/v1/auth?password=Demo123!&username=admin@demo.io`
-4. Kjør scenarioet ved hjelp av `Engine`-klassen
-5. Legg deretter på en `check` for å lagre autentiseringstoken
-    - Tips:
-   ```
-   .check(jsonPath("$.authToken").saveAs("authToken")
-   ```
+1. Åpne `build.gradle.kts`
+2. Kopier inn følgende:
+```
+val spec = "http://192.168.1.93:8080/bank/v2/api-docs"
+val generatedSources = "$buildDir/generated/bank"
 
-## Oppgaver, Del 2:
-1. Åpne `CreateUserDel2`
-2. Legg inn `feeder` som vi allerede har lagd i tidligere oppgave
-3. Kopier også inn `objectMapper` fra tidligere oppgave
-4. Legg til Authorization-header i "Post new user"
-5. Legg til en print av `returnBody` for debugging
-   - Tips:
-   ```
-   session.getString("returnBody")
-   ```
-6. Lagre eposten og passordet til brukeren i en fil.
-7. Kjør scenarioet et par ganger og sjekk at det blir lagt til en bruker i testData-filen for hver gang.
+sourceSets {
+    getByName("main") {
+        java {
+            srcDir("$generatedSources/src/main/kotlin")
+        }
+    }
+}
 
-## Oppgaver, Del 3:
-1. Legg til autoriseringskall for brukeren som er lagt til
-   - Tips: 
-   ```
-   Se på autoriseringen for admin-brukeren. Det er ganske likt. Det eneste vi må endre er brukernavn og passord.
-   Husk, vi har allerede lagret all brukerinformasjon i session.
-   ```
-2. Under `models` er det en ny dataklasse som heter Accounts. Fullfør innlegging av ny konto. 
-   1. Endepunkt: `/api/v1/user/account`
+tasks{
+    openApiGenerate{
+        generatorName.set("kotlin")
+        inputSpec.set(spec)
+        outputDir.set(generatedSources)
+
+        skipValidateSpec.set(true)
+
+        modelPackage.set("com.example.gatling.api")
+        modelPackage.set("com.example.gatling.model")
+
+        systemProperties.set(
+            mapOf(
+                "models" to "", // Only generate models (not the api and supporting files)
+                "modelDocs" to "false"
+            )
+        )
+
+        configOptions.set(
+            mapOf(
+                "dateLibrary" to "java8",
+                "enumPropertyNaming" to "PascalCase",
+                "serializationLibrary" to "jackson"
+            )
+        )
+
+        typeMappings.set(
+            mapOf(
+                "ByteArray" to "kotlin.String",
+                "java.time.OffsetDateTime" to "kotlin.String"
+            )
+        )
+    }
+
+    compileKotlin {
+        dependsOn(openApiGenerate)
+    }
+}
+```
+3. Sett inn riktig baseUrl
+4. Åpne terminal-vinduet i IntelliJ
+5. Skriv inn: `gradlew build` og kjør kommandoen med `Command + Enter`
+6. Se om dere finner noen nyttige klasser under `build/generated/bank`
+7. I `CreateUser`, erstatt `User` og `Account` med passende nye klasser
+8. I scenarioet må vi lage `NewAccount` med parametre. Den gamle `Account` hadde default verdier. Se hvordan disspe parametrene er satt og legg det inn i scenarioet.
+9. Dere kan nå slette hele `models`-folderen
+10. Kjør testen på nytt. Den skal fortsatt fungere
+
+Vi har nå spart oss for mye manuelt arbeid ved å slippe å lage klasser fra Swagger-dokumentasjonen.

@@ -1,13 +1,13 @@
 package simulations
 
-import com.example.gatling.model.NewAccount
-import com.example.gatling.model.NewUser
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.gatling.javaapi.core.*
 import io.gatling.javaapi.core.CoreDsl.*
 import io.gatling.javaapi.http.HttpDsl.*
+import models.Account
+import models.User
 import org.apache.commons.lang3.RandomStringUtils
 import java.io.FileWriter
 import java.math.BigDecimal
@@ -31,8 +31,8 @@ class CreateUser : Simulation() {
         "Content-type" to "application/json"
     )
 
-    val feeder: Iterator<Map<String, NewUser>> = generateSequence {
-        val user = NewUser(
+    val feeder: Iterator<Map<String, User>> = generateSequence {
+        val user = User(
             address = "string",
             country = "string",
             dob = "12/12/1990",
@@ -64,22 +64,22 @@ class CreateUser : Simulation() {
         .exec(
             http("Post new user").post("/api/v1/user?role=USER").headers(genericHeader)
                 .header("Authorization", "Bearer \${authToken}")
-                .body(StringBody { session -> objectMapper.writeValueAsString(session.get<NewUser>("user")) }).check(
+                .body(StringBody { session -> objectMapper.writeValueAsString(session.get<User>("user")) }).check(
                     bodyString().saveAs("returnBody")
                 )
         ).exec { session ->
             println("!!!! ${session.getString("returnBody")}")
             session
         }.exec { session ->
-            val user = session.get<NewUser>("user")
+            val user = session.get<User>("user")
             val myWriter = FileWriter("${System.getProperty("user.dir")}/src/gatling/resources/testData.csv", true)
             myWriter.write("\n${user.emailAddress};${user.password}")
             myWriter.close()
             session
         }.exec(
             http("Auth User").post { session ->
-                "/api/v1/auth?password=${session.get<NewUser>("user").password}&username=${
-                    session.get<NewUser>(
+                "/api/v1/auth?password=${session.get<User>("user").password}&username=${
+                    session.get<User>(
                         "user"
                     ).emailAddress
                 }"
@@ -90,12 +90,7 @@ class CreateUser : Simulation() {
             http("Create acoount").post("/api/v1/user/account").headers(genericHeader).body(StringBody {
                 objectMapper.writeValueAsString(
                     //Oppgave 8
-                    NewAccount(
-                        accountName = "Savings",
-                        accountTypeCode = "8",
-                        openingDeposit = BigDecimal.valueOf(100).setScale(0),
-                        ownerTypeCode = "18"
-                    )
+                    Account()
                 )
             }).header("Authorization", "Bearer \${authTokenUser}")
         )

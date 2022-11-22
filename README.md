@@ -13,10 +13,10 @@ Oppgaver:
      mapOf("email" to email)
      }.iterator()
    ```
-3. Print ut ordet: `Hello, my email is: `. Med eposten fra generert bruker.
+3. Print ut ordet: `Hello, my email is: `. Med eposten fra generert bruker, 10 ganger.
    - Tips: 
    ```
-   feeder.next()
+   feeder.next()["user"]
    ```
    - Tips:
    ```

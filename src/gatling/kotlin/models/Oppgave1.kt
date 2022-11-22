@@ -29,6 +29,9 @@ data class User(
 )
 
 fun main() {
+    val objectMapper =
+        ObjectMapper().registerKotlinModule().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
     //Oppgave 2
     val feeder: Iterator<Map<String, User>> = generateSequence {
         val user = User(
@@ -52,24 +55,20 @@ fun main() {
         mapOf("user" to user)
     }.iterator()
 
-    //Oppgave 3
-    for (i in 0 until 10) {
-        println()
-    }
 
-    //Oppgave 4
     for (i in 0 until 10) {
+        //Oppgave 3
+        val user = feeder.next()["user"]!!
+
+        println("Hello, my email is: ${user.emailAddress}")
+
+        //Oppgave 4
         val myWriter = FileWriter("${System.getProperty("user.dir")}/src/gatling/resources/testData.csv", true)
-        myWriter.write("")
+        myWriter.write("${user.emailAddress},${user.password}\n")
         myWriter.close()
-    }
 
-    //Oppgave 5
-    val objectMapper =
-        ObjectMapper().registerKotlinModule().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-
-    for (i in 0 until 10) {
-        println()
+        //Oppgave 5
+        println(objectMapper.writeValueAsString(user))
     }
 
 }

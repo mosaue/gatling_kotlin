@@ -1,35 +1,41 @@
-Oppgaver:
-===============================================
+## Scenario
+Etter disse oppgavene er fullført skal vi ha ferdig et scenario som gjør følgende:
+1. Autentiserer seg som admin-bruker
+2. Legger til en ny bruker i banken
+3. Autentiserer seg som denne nye brukeren
+4. Oppretter en konto i banken
 
-1. Fyll inn de resterende feltene i dataklassen `User` som ligger under `src/gatling/kotlin/models/Oppgave1.kt`
-   1. Felter som skal være med er finner dere på 
-2. Lag en sekvensgenerator som lager nye `Users`. Det skal genereres unike `ssn`, `emailAddress` og `password` for hver `User` som opprettes
+## Oppgaver, Del 1:
+1. Åpne `CreateUserDel1` og fyll inn `baseUrl`
+2. Legg til navn på scenario
+3. Legg til en http-request, med POST-metode og de standard-headerne (`genericHeader`)
+   1. Request-URL er: `/api/v1/auth?password=Demo123!&username=admin@demo.io`
+4. Kjør scenarioet ved hjelp av `Engine`-klassen
+5. Legg deretter på en `check` for å lagre autentiseringstoken
+    - Tips:
+   ```
+   .check(jsonPath("$.authToken").saveAs("authToken")
+   ```
+
+## Oppgaver, Del 2:
+1. Åpne `CreateUserDel2`
+2. Legg inn `feeder` som vi allerede har lagd i tidligere oppgave
+3. Kopier også inn `objectMapper` fra tidligere oppgave
+4. Legg til Authorization-header i "Post new user"
+5. Legg til en print av `returnBody` for debugging
+   - Tips:
+   ```
+   session.getString("returnBody")
+   ```
+6. Lagre eposten og passordet til brukeren i en fil.
+7. Kjør scenarioet et par ganger og sjekk at det blir lagt til en bruker i testData-filen for hver gang.
+
+## Oppgaver, Del 3:
+1. Legg til autoriseringskall for brukeren som er lagt til
    - Tips: 
    ```
-     import org.apache.commons.lang3.RandomStringUtils
-   
-     val feeder = generateSequence {
-     val email = RandomStringUtils.randomAlphanumeric(20) + "@foo.com"
-     mapOf("email" to email)
-     }.iterator()
+   Se på autoriseringen for admin-brukeren. Det er ganske likt. Det eneste vi må endre er brukernavn og passord.
+   Husk, vi har allerede lagret all brukerinformasjon i session.
    ```
-3. Print ut ordet: `Hello, my email is: `. Med eposten fra generert bruker, 10 ganger.
-   - Tips: 
-   ```
-   feeder.next()["user"]
-   ```
-   - Tips:
-   ```
-   bruk `$` for å referere til en variabel i en string
-   ```
-4. Skriv `emailAddress` og `password` til en fil, på 10 linjer
-   - Tips:
-   ```
-   \n => newline
-   ```
-5. Bruk ObjectMapper til å printe ut all brukerinformasjon om hver bruker
-   - Tips:
-   ```
-   objectMapper.writeValueAsString()
-   ```
-   
+2. Under `models` er det en ny dataklasse som heter Accounts. Fullfør innlegging av ny konto. 
+   1. Endepunkt: `/api/v1/user/account`

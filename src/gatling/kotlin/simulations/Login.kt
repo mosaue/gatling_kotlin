@@ -29,7 +29,7 @@ class Login : Simulation() {
     )
 
     //Oppgave 2
-    val userFeeder = csv("testData.csv").circular()
+    val userFeeder = TODO()
 
     private val scn = scenario("Login")
         .exec(
@@ -39,14 +39,13 @@ class Login : Simulation() {
         )
         .pause(20)
         //Oppgave 3
-        .feed(userFeeder)
         .exec(
             http("request_25")
                 .post("/bank/login")
                 .headers(headers_25)
                 //Oppgave 3
-                .formParam("username", "\$email")
-                .formParam("password", "\$password")
+                .formParam("username", "")
+                .formParam("password", "")
         )
         .pause(16)
         .exec(

@@ -1,5 +1,9 @@
 Oppgave
 ===============================================
+Lag lastprofiler for 
+- Load Test
+- Volume Test
+- Stress Test
 
 Velg enten API eller web. Hvis du blir ferdig med den ene kan du ta den andre også.
 
@@ -14,3 +18,4 @@ Velg enten API eller web. Hvis du blir ferdig med den ene kan du ta den andre og
 accountTypeCode: SCK - Standard Checking, ICK - Interest Checking, SAV - Savings
 ownerTypeCode: IND - Individual, JNT - Joint
 transactionTypeCode: WTH - Withdrawal, DPT - Deposit
+

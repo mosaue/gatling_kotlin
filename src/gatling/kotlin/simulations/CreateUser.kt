@@ -66,6 +66,8 @@ class CreateUser : Simulation() {
                 .header("Authorization", "Bearer \${authToken}")
                 .body(StringBody { session -> objectMapper.writeValueAsString(session.get<NewUser>("user")) }).check(
                     bodyString().saveAs("returnBody")
+                ).check(
+                    jsonPath("$.id").saveAs("userId")
                 )
         ).exec { session ->
             println("!!!! ${session.getString("returnBody")}")

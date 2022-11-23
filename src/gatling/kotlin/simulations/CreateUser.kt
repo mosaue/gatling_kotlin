@@ -83,6 +83,9 @@ class CreateUser : Simulation() {
             myWriter.close()
             session
         }.exec(
+            http("Post new role").put("/api/v1/user/\${userId}/role?role=API").headers(genericHeader)
+                .header("Authorization", "Bearer \${authToken}")
+        ).exec(
             http("Auth User").post { session ->
                 "/api/v1/auth?password=${session.get<User>("user").password}&username=${
                     session.get<User>(

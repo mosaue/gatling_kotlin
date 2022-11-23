@@ -24,9 +24,9 @@ class CreateUserDel1 : Simulation() {
     )
 
     //Oppgave 2 + 3
-    val scenario = scenario("Sett inn passende navn").exec(
+    val scenario = scenario("Sett inn passende navn")/*.exec(
         http("Auth")
-    )
+    )*/
 
     init {
         setUp(scenario.injectOpen(atOnceUsers(1))).protocols(httpProtocol)

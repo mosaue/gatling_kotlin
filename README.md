@@ -39,3 +39,11 @@ Etter disse oppgavene er fullført skal vi ha ferdig et scenario som gjør følg
    ```
 2. Under `models` er det en ny dataklasse som heter Accounts. Fullfør innlegging av ny konto. 
    1. Endepunkt: `/api/v1/user/account`
+3. Når du kjører testen vil den feile. En ny rolle må legges til på brukeren, før vi oppretter Account.
+   Legg til ny rolle med følgende kall:
+   ```
+   .exec(
+            http("Post new role").put("/api/v1/user/\${userId}/role?role=API").headers(genericHeader)
+                .header("Authorization", "Bearer \${authToken}")
+        )
+   ```

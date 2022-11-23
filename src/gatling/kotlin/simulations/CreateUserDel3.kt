@@ -78,11 +78,11 @@ class CreateUserDel3 : Simulation() {
             session
         }.exec(
             //Oppgave 1
-            http("Auth User").post { session ->
+            /*http("Auth User").post { session ->
 
             }.headers(genericHeader).check(
 
-            )
+            )*/
         ).exec(
             //Oppgave 2
         )

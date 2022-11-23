@@ -47,3 +47,4 @@ Etter disse oppgavene er fullført skal vi ha ferdig et scenario som gjør følg
                 .header("Authorization", "Bearer \${authToken}")
         )
    ```
+4. `userId` må vi hente fra JSON-responsen i "Post new user"-kallet

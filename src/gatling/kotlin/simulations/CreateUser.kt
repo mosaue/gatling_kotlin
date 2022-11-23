@@ -69,8 +69,12 @@ class CreateUser : Simulation() {
                 )
         ).exec { session ->
             println("!!!! ${session.getString("returnBody")}")
+            println("!!!! ${session.getString("userId")}")
             session
-        }.exec { session ->
+        }.exec(
+            http("Post new role").put("/api/v1/user/\${userId}/role?role=API").headers(genericHeader)
+                .header("Authorization", "Bearer \${authToken}")
+        ).exec { session ->
             val user = session.get<NewUser>("user")
             val myWriter = FileWriter("${System.getProperty("user.dir")}/src/gatling/resources/testData.csv", true)
             myWriter.write("\n${user.emailAddress};${user.password}")

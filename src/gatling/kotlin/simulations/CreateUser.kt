@@ -15,7 +15,7 @@ import java.util.*
 
 class CreateUser : Simulation() {
 
-    val baseUrl = ""
+    val baseUrl = "13.48.58.189"
 
     private val httpProtocol =
         http.baseUrl("http://$baseUrl:8080/bank").disableFollowRedirect().inferHtmlResources().acceptHeader("*/*")
@@ -66,11 +66,17 @@ class CreateUser : Simulation() {
                 .header("Authorization", "Bearer \${authToken}")
                 .body(StringBody { session -> objectMapper.writeValueAsString(session.get<User>("user")) }).check(
                     bodyString().saveAs("returnBody")
+                ).check(
+                    jsonPath("$.id").saveAs("userId")
                 )
         ).exec { session ->
             println("!!!! ${session.getString("returnBody")}")
+            println("!!!! ${session.getString("userId")}")
             session
-        }.exec { session ->
+        }.exec(
+            http("Post new role").put("/api/v1/user/\${userId}/role?role=API").headers(genericHeader)
+                .header("Authorization", "Bearer \${authToken}")
+        ).exec { session ->
             val user = session.get<User>("user")
             val myWriter = FileWriter("${System.getProperty("user.dir")}/src/gatling/resources/testData.csv", true)
             myWriter.write("\n${user.emailAddress};${user.password}")
